@@ -5,8 +5,9 @@ import numpy as np
 
 def main():
     imagem = cv2.imread('imagens/diversas/lena.jpg',0)
-    limear = histogramaImagemOriginal(imagem)
-    binarizacaoImagem(limear,imagem)
+    limiar = histogramaImagemOriginal(imagem)
+    imagembi = binarizacaoImagem(limiar,imagem)
+    exibir(imagembi,imagem)
 
 def histogramaImagemOriginal(imagem):
     plt.subplot(121)
@@ -15,23 +16,21 @@ def histogramaImagemOriginal(imagem):
     plt.ylabel('qtde de pixels')
     plt.hist(imagem.ravel(), bins=256, range=[0, 255])
     plt.show()
-    limear = int(input("Digite o valor do limiar: "))
+    limiar = int(input("Digite o valor do limiar: "))
 
-    return limear
+    return limiar
 
 def binarizacaoImagem(limear,imagem):
     [altura,largura] = imagem.shape
     imagembi = np.copy(imagem)
     for i in range(altura):
         for j in range(largura):
-            if(imagem[i][j] <= limear):
+            if(imagem[i][j] >= limear):
                 imagembi[i][j] =  255
             else:
                 imagembi[i][j] = 0
-    cv2.imshow('Imagem Original', imagem)
-    cv2.imshow('Imagem Binarizada', imagembi)
-    exibir(imagembi,imagem)
-    cv2.waitKey()
+
+    return imagembi
 
 
 def exibir(imagembi,imagem):
@@ -39,7 +38,7 @@ def exibir(imagembi,imagem):
     cv2.imshow('Imagem Binarizada', imagembi)
 
     plt.subplot(121)
-    plt.title('Histograma Original')
+    plt.title('Imagem Original')
     plt.xlabel('niveis de cinza')
     plt.ylabel('qtde de pixels')
     plt.hist(imagem.ravel(), bins=256, range=[0, 255])
@@ -51,5 +50,6 @@ def exibir(imagembi,imagem):
     plt.hist(imagembi.ravel(), bins=256, range=[0, 255])
 
     plt.show()
+    cv2.waitKey(0)
 
 main()
